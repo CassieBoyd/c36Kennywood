@@ -48,3 +48,33 @@ class ItineraryItems(ViewSet):
         serializer = ItinerarySerializer(new_itinerary_item, context={'request': request})
 
         return Response(serializer.data)
+
+    # handles GET all
+    def list(self, request):
+            """Handle GET requests to itinerary resource
+
+            Returns:
+                Response -- JSON serialized list of itineraries
+            """
+            items = Itinerary.objects.all()
+            serializer = ItinerarySerializer(
+                items,
+                many=True,
+                context={'request': request}
+            )
+            return Response(serializer.data)
+
+    # handles PUT
+    def update(self, request, pk=None):
+      """Handle PUT requests for an item
+
+      Returns:
+          Response -- Empty body with 204 status code
+      """
+      item = Itinerary.objects.get(pk=pk)
+      item.starttime = request.data["starttime"]
+      item.attraction_id = request.data["attraction_id"]
+      item.customer_id = request.data["customer_id"]
+      item.save()
+
+      return Response({}, status=status.HTTP_204_NO_CONTENT)
