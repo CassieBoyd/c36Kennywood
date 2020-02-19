@@ -40,7 +40,7 @@ class ItineraryItems(ViewSet):
     def create(self, request):
         new_itinerary_item = Itinerary()
         new_itinerary_item.starttime = request.data["starttime"]
-        new_itinerary_item.customer_id = request.auth.user.id
+        new_itinerary_item.customer_id = request.auth.user.customer.id
         new_itinerary_item.attraction_id = request.data["ride_id"]
 
         new_itinerary_item.save()
