@@ -54,3 +54,29 @@ class Attractions(ViewSet):
         serializer = AttractionSerializer(attractions, many=True, context={'request': request})
 
         return Response(serializer.data)
+
+    # Handles POST
+    def create(self, request):
+        new_attraction = Attraction()
+        new_attraction.name = request.data["name"]
+        new_attraction.area_id = request.data["area_id"]
+
+        new_attraction.save()
+
+        serializer = AttractionSerializer(new_attraction, context={'request': request})
+
+        return Response(serializer.data)
+
+    # handles PUT
+    def update(self, request, pk=None):
+      """Handle PUT requests for a park area
+
+      Returns:
+          Response -- Empty body with 204 status code
+      """
+      attraction = Attraction.objects.get(pk=pk)
+      attraction.name = request.data["name"]
+      attraction.area_id = request.data["area_id"]
+      attraction.save()
+
+      return Response({}, status=status.HTTP_204_NO_CONTENT)
