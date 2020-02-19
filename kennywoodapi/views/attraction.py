@@ -69,7 +69,7 @@ class Attractions(ViewSet):
 
     # handles PUT
     def update(self, request, pk=None):
-      """Handle PUT requests for a park area
+      """Handle PUT requests for a attraction
 
       Returns:
           Response -- Empty body with 204 status code
@@ -80,3 +80,22 @@ class Attractions(ViewSet):
       attraction.save()
 
       return Response({}, status=status.HTTP_204_NO_CONTENT)
+
+    # handles DELETE
+    def destroy(self, request, pk=None):
+        """Handle DELETE requests for a single attraction
+
+        Returns:
+            Response -- 200, 404, or 500 status code
+        """
+        try:
+            attraction = Attraction.objects.get(pk=pk)
+            attraction.delete()
+
+            return Response({}, status=status.HTTP_204_NO_CONTENT)
+
+        except Attraction.DoesNotExist as ex:
+            return Response({'message': ex.args[0]}, status=status.HTTP_404_NOT_FOUND)
+
+        except Exception as ex:
+            return Response({'message': ex.args[0]}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
